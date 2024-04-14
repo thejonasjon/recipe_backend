@@ -1,5 +1,5 @@
 """
-Database models
+Database models.
 """
 
 import uuid
@@ -16,8 +16,9 @@ from django.contrib.auth.models import (
 
 def recipe_image_file_path(instance, filename):
     """Generate file path for new recipe image."""
-    exc = os.path.splitext(filename)[1]
-    filename = f'{uuid.uuid4()}{exc}'
+    ext = os.path.splitext(filename)[1]
+    filename = f'{uuid.uuid4()}{ext}'
+
     return os.path.join('uploads', 'recipe', filename)
 
 class UserManager(BaseUserManager):
@@ -29,7 +30,6 @@ class UserManager(BaseUserManager):
         user = self.model(email=self.normalize_email(email), **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
-
         return user
 
     def create_superuser(self, email, password):
