@@ -2,7 +2,10 @@
 
 # Recipe Backend API
 
-This is the backend API for Recipi, a platform for sharing and discovering recipes. The API is built using Django and Django Rest Framework, and can be easily set up using Docker.
+This is the backend API for Recipi, a platform for sharing and discovering recipes.
+
+# Technology / Tools
+The API is built using Django | Django_rest | Docker
 
 
 ## Getting Started
@@ -10,32 +13,45 @@ This is the backend API for Recipi, a platform for sharing and discovering recip
 To get started with the Recipe Backend API, follow these steps:
 
 1. Clone the repository:
+```bash
 git clone https://github.com/thejonasjon/recipi_backend.git
+```
 
-2. Build the Docker images:
+3. Build the Docker images:
+```bash
 docker build .
+```
 
-3. Navigate to the proxy folder and build the Docker image:
+4. Navigate to the proxy folder and build the Docker image:
+```bash
 cd proxy
 docker build .
+```
 
-4. Return to the main directory:
-cd..
+5. Return to the main directory:
+```bash
+cd ..
+```
 
-5. Run Docker Compose to build the development environment:
+7. Run Docker Compose to build the development environment:
+```bash
 docker-compose -f docker-compose.yml up
+```
 
-6. You're all set! The development environment should now be up and running.
+8. You're all set! The development environment should now be up and running.
 
 
 ## Other Commands
 
 - To run tests:
+```bash
 docker-compose run --rm app sh -c "python manage.py test"
+```
 
 - To run lint check:
+```bash
 docker-compose run --rm app sh -c "flake8"
-
+```
 
 ## Contributing
 
@@ -53,11 +69,4 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 For more information, please refer to <https://unlicense.org>.
 
-
-
 Feel free to copy and paste this into your README file!
-
-
-
-
-
