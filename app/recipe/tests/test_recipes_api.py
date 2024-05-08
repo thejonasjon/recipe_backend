@@ -11,7 +11,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from rest_framework import status
-from rest_framework.test import APIClient, force_authenticate
+from rest_framework.test import APIClient
 
 from core.models import (
     Recipe,
@@ -27,13 +27,16 @@ from recipe.serializers import (
 
 RECIPES_URL = reverse('recipe:recipe-list')
 
+
 def image_upload_url(recipe_id):
     """Create and return image url."""
     return reverse('recipe:recipe-upload-image', args=[recipe_id])
 
+
 def detail_url(recipe_id):
     """Create and return a recipe detail URL"""
     return reverse('recipe:recipe-detail', args=[recipe_id])
+
 
 def create_recipe(user, **params):
     """Create and return a sample recipe."""
@@ -54,7 +57,7 @@ class PublicRecipeApiTests(TestCase):
     """Test unauthenticated API request."""
 
     def setUp(self):
-        self.client  = APIClient()
+        self.client = APIClient()
 
     def test_auth_required(self):
         """Test auth is required to call API."""
@@ -89,7 +92,9 @@ class PrivateRecipeApiTests(TestCase):
 
     def test_recipe_list_limited_to_user(self):
         """Test list of recipe is limited to authenticated user."""
-        other_user = get_user_model().objects.create_user('otheruser@example.com', 'otheruser123')
+        other_user = get_user_model().objects.create_user(
+            'otheruser@example.com', 'otheruser123'
+        )
 
         create_recipe(user=other_user)
         create_recipe(user=self.user)
@@ -154,7 +159,6 @@ class PrivateRecipeApiTests(TestCase):
     def test_full_update(self):
         """Test full update on recipe API"""
 
-        original_liink = 'https://example.com/recipe.pdf'
         recipe = create_recipe(
             user=self.user,
             title='Sample recipe title',
@@ -163,10 +167,10 @@ class PrivateRecipeApiTests(TestCase):
         )
         payload = {
             'title': 'New recipe title',
-            'link':'https://example.com/recipe.pdf',
+            'link': 'https://example.com/recipe.pdf',
             'time_minutes': 12,
             'price': Decimal('3.5'),
-            'description':'New sample recipe description.',
+            'description': 'New sample recipe description.',
         }
 
         url = detail_url(recipe.id)
@@ -177,7 +181,6 @@ class PrivateRecipeApiTests(TestCase):
         for k, v in payload.items():
             self.assertEqual(getattr(recipe, k), v)
         self.assertEqual(recipe.user, self.user)
-
 
     def test_create_recipe_with_tags(self):
         """Test creating a recipe with a new tag"""
@@ -201,7 +204,6 @@ class PrivateRecipeApiTests(TestCase):
                 user=self.user,
             ).exists()
             self.assertTrue(exists)
-
 
     def test_create_recipe_with_existing_tags(self):
         """Test creating recipe with existing tag."""
@@ -316,7 +318,6 @@ class PrivateRecipeApiTests(TestCase):
             ).exists()
             self.assertTrue(exists)
 
-
     def test_create_ingredients_on_update(self):
         """Test creating an ingredient when updating recipe."""
         recipe = create_recipe(user=self.user)
@@ -328,7 +329,6 @@ class PrivateRecipeApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         new_ingredient = Ingredient.objects.get(user=self.user, name='Limes')
         self.assertIn(new_ingredient, recipe.ingredients.all())
-
 
     def test_update_recipe_assign_ingredients(self):
         """Test assigning an existing ingredient when updating a recipe."""
@@ -345,7 +345,6 @@ class PrivateRecipeApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertIn(ingredient2, recipe.ingredients.all())
         self.assertNotIn(ingredient1, recipe.ingredients.all())
-
 
     def test_clear_recipe_ingredients(self):
         """Test clearing recipe ingredients."""
@@ -417,7 +416,6 @@ class ImageUploadTests(TestCase):
     def tearDown(self):
         self.recipe.image.delete()
 
-
     def test_upload_image(self):
         """Test uploading an image to recipe"""
         url = image_upload_url(self.recipe.id)
@@ -439,11 +437,3 @@ class ImageUploadTests(TestCase):
         paylaod = {'image': 'notimage'}
         res = self.client.post(url, paylaod, format='multipart')
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-
-
-
-
-
-
-
-

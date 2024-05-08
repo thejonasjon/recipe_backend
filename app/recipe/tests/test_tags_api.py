@@ -1,7 +1,7 @@
 """
 Test for the tag API.
 """
-from decimal import  Decimal
+from decimal import Decimal
 
 from django.contrib.auth import get_user_model
 from django.urls import reverse
@@ -18,9 +18,11 @@ from recipe.serializers import TagSerializer
 
 TAGS_URL = reverse('recipe:tag-list')
 
+
 def detail_url(tag_id):
     """Create and return a tag details url"""
     return reverse('recipe:tag-detail', args=[tag_id])
+
 
 def create_user(email='taguser@example.com', password='testpassword'):
     """Create and return a user."""
@@ -32,7 +34,6 @@ class PublicTagApiTests(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-
 
     def test_auth_required(self):
         """Test auth is required for retrieving tags."""
@@ -48,7 +49,6 @@ class PrivateTagsAPITests(TestCase):
         self.user = create_user()
         self.client = APIClient()
         self.client.force_authenticate(self.user)
-
 
     def test_retrieve_tags(self):
         """Test retrieving list of tags."""
@@ -77,7 +77,6 @@ class PrivateTagsAPITests(TestCase):
         self.assertEqual(res.data[0]['name'], tag.name)
         self.assertEqual(res.data[0]['id'], tag.id)
 
-
     def test_update_tag(self):
         """Test updating a Tag"""
         tag = Tag.objects.create(user=self.user, name='After Dinner')
@@ -90,7 +89,6 @@ class PrivateTagsAPITests(TestCase):
         tag.refresh_from_db()
         self.assertEqual(tag.name, payload['name'])
 
-
     def test_delete_tag(self):
         """Test deletig a tag."""
 
@@ -102,7 +100,6 @@ class PrivateTagsAPITests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         tag = Tag.objects.filter(user=self.user)
         self.assertFalse(tag.exists())
-
 
     def test_filter_tags_assigned_to_recipes(self):
         """Test listing tags to those assigned to Recipes."""
@@ -144,9 +141,3 @@ class PrivateTagsAPITests(TestCase):
         res = self.client.get(TAGS_URL, {'assigned_only': 1})
 
         self.assertEqual(len(res.data), 1)
-
-
-
-
-
-

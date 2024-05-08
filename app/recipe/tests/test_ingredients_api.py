@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APIClient, force_authenticate
+from rest_framework.test import APIClient
 
 from core.models import (
     Ingredient,
@@ -20,9 +20,11 @@ from recipe.serializers import IngredientSerializer
 
 INGREDIENT_URL = reverse('recipe:ingredient-list')
 
+
 def detail_url(ingredient_id):
     """Return ingridient detail."""
     return reverse('recipe:ingredient-detail', args=[ingredient_id])
+
 
 def create_user(email='user@example.com', password='password123'):
     """Create and return user."""
@@ -34,7 +36,6 @@ class PublicIngredientApiTests(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-
 
     def test_auth_required(self):
         """Test auth is required for retriving ingredients."""
@@ -140,16 +141,3 @@ class PrivateIngredientApiTests(TestCase):
 
         res = self.client.get(INGREDIENT_URL, {'assigned_only': 1})
         self.assertEqual(len(res.data), 1)
-
-
-
-
-
-
-
-
-
-
-
-
-
