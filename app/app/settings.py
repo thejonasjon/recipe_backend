@@ -24,7 +24,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
 # 'django-insecure-35h=$d!@cqw#c(-3qv+@we!*&s9+i-(f1m-9r2=gw5syhf5rty'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(int(os.environ.get('DEBUG', 0)))
+DEBUG = True #bool(int(os.environ.get('DEBUG', 0)))
 
 ALLOWED_HOSTS = []
 ALLOWED_HOSTS.extend(
@@ -46,11 +46,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Thirdparty apps
+    'user',
     'core',
     'rest_framework',
     'rest_framework.authtoken',
     'drf_spectacular',
-    'user',
     'recipe',
 ]
 
@@ -149,7 +149,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'core.User'
 
 REST_FRAMEWORK = {
-    # YOUR SETTINGS
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 

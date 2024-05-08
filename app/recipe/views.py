@@ -29,32 +29,31 @@ from recipe import serializers
 
 @extend_schema_view(
     list=extend_schema(
-        parameters={
+        parameters=[
             OpenApiParameter(
                 'tags',
                 OpenApiTypes.STR,
-                description='Comma Seperated list of tag IDs to filter',
+                description='Comma Separated list of tag IDs to filter',
             ),
             OpenApiParameter(
                 'ingredients',
                 OpenApiTypes.STR,
-                description='Comma Seperated list of ingredient IDs to filter'
-            )
-        }
+                description='Comma Separated list of ingredient IDs to filter'
+            ),
+        ]
     )
 )
 class RecipeViewSet(viewsets.ModelViewSet):
     """View for manage recipe APIs."""
 
-    def _params_to_ints(self, qs):
-        """Convert a list of strings to integers."""
-        return [int(str_id) for str_id in qs.split(',')]
-
-
     serializer_class = serializers.RecipeDetailSerialiser
     queryset = Recipe.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+
+    def _params_to_ints(self, qs):
+        """Convert a list of strings to integers."""
+        return [int(str_id) for str_id in qs.split(',')]
 
     def get_queryset(self):
         """Retrieve recipe for authenticated user"""
@@ -100,9 +99,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
         parameters=[
             OpenApiParameter(
                 'assigned_only',
-                OpenApiTypes.INT, enum=[0,1],
-                description='Filter by items assigned to recipes.'
-            )
+                OpenApiTypes.INT, enum=[0, 1],
+                description='Filter by items assigned to recipes.',
+            ),
         ]
     )
 )
